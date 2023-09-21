@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -26,6 +27,16 @@ public class GameScreen implements Screen {
     //zoom in/out? Keep everything scaled?
     private Viewport viewport;
 
+
+    private GameBoard myGameBoard;
+    public GameScreen(){
+        myGameBoard = new GameBoard();
+    }
+
+
+
+
+
     // run one time at the very beginning all setup should have been here
     @Override
     public void show() {
@@ -45,7 +56,12 @@ public class GameScreen implements Screen {
 
         //??????, i just know that this was the solution to an anoying issue
         shapeRenderer.setAutoShapeType(true);
+
+
+
     }
+
+
 
 
     public void clearScreen(){
