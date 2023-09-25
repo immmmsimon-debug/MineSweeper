@@ -29,6 +29,9 @@ public class GameScreen implements Screen {
 
 
     private GameBoard myGameBoard;
+
+
+
     public GameScreen(){
         myGameBoard = new GameBoard();
     }
@@ -85,13 +88,15 @@ public class GameScreen implements Screen {
 
         //all drawing of shape must go between begin/end
         shapeRenderer.begin();
-        shapeRenderer.setColor(1,1,0,1);
-        shapeRenderer.circle(300,300,30);
+        shapeRenderer.setColor(0,0,1,1);
         shapeRenderer.end();
+
 
 
         //all graphic must go between begin/end
         spriteBatch.begin();
+        myGameBoard.draw(spriteBatch);
+
         spriteBatch.end();
     }
 
