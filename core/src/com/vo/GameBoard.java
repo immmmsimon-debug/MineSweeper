@@ -41,7 +41,7 @@ public class GameBoard {
             numsBombs = 99;
             loadGraphics();
             xoffset = (int) (MyGdxGame.World_Width - 30 * 25) / 2;
-            yoffset = (int) (MyGdxGame.World_Height - 16 * 25) / 2;
+            yoffset = (int) ((MyGdxGame.World_Height - 16 * 25) / 2) + (25*16);
             placeBombs();
             setNumberOnBoard();
         }
@@ -50,8 +50,8 @@ public class GameBoard {
             board = new int[numRows][numCols];
             this.numsBombs = numsBombs;
             loadGraphics();
-            xoffset = (int)(MyGdxGame.World_Width-30*25)/2;
-            yoffset = (int)(MyGdxGame.World_Height-16*25)/2;
+            xoffset = (int)(MyGdxGame.World_Width-numCols*25)/2;
+            yoffset = (int)((MyGdxGame.World_Height -numRows * 25) / 2) + (25*numRows);
             placeBombs();
             setNumberOnBoard();
 
@@ -81,6 +81,24 @@ public class GameBoard {
                 }
             }
         }
+    }
+
+    public Location getTileAt(int mouse_x, int mouse_y){
+            int col = 0;
+            int row = 0;
+            int reverseYOffset = (int)(yoffset - MyGdxGame.World_Height);
+          col = (mouse_x - xoffset)/25;
+          row = (mouse_y + reverseYOffset)/25;
+          if(isValid(new Location(row,col)))
+              return new Location(row,col);
+          else
+              return  null;
+
+
+
+
+
+
     }
 
     public int getEightNeighbors(int i , int j) {
@@ -119,34 +137,34 @@ public class GameBoard {
             for(int row=0; row< board.length; row++){
                 for(int col=0; col<board[row].length; col++){
                     if(board[row][col] == EMPTYTILE) {
-                        spriteBatch.draw(emptyTile, xoffset + (col * 25), yoffset + (row * 25));
+                        spriteBatch.draw(emptyTile, xoffset + (col * 25), yoffset + (row * -25));
                     }
                     else if(board[row][col] == BOMB) {
-                        spriteBatch.draw(bombTile, xoffset + (col * 25), yoffset + (row * 25));
+                        spriteBatch.draw(bombTile, xoffset + (col * 25), yoffset + (row * -25));
                     }
                     else if(board[row][col] == 1) {
-                        spriteBatch.draw(oneTile, xoffset + (col * 25), yoffset + (row * 25));
+                        spriteBatch.draw(oneTile, xoffset + (col * 25), yoffset + (row * -25));
                     }
                     else if(board[row][col] == 2) {
-                        spriteBatch.draw(twoTile, xoffset + (col * 25), yoffset + (row * 25));
+                        spriteBatch.draw(twoTile, xoffset + (col * 25), yoffset + (row * -25));
                     }
                     else if(board[row][col] == 3) {
-                        spriteBatch.draw(threeTile, xoffset + (col * 25), yoffset + (row * 25));
+                        spriteBatch.draw(threeTile, xoffset + (col * 25), yoffset + (row * -25));
                     }
                     else if(board[row][col] == 4) {
-                        spriteBatch.draw(fourTile, xoffset + (col * 25), yoffset + (row * 25));
+                        spriteBatch.draw(fourTile, xoffset + (col * 25), yoffset + (row * -25));
                     }
                     else if(board[row][col] == 5) {
-                        spriteBatch.draw(fiveTile, xoffset + (col * 25), yoffset + (row * 25));
+                        spriteBatch.draw(fiveTile, xoffset + (col * 25), yoffset + (row * -25));
                     }
                     else if(board[row][col] == 6) {
-                        spriteBatch.draw(sixTile, xoffset + (col * 25), yoffset + (row * 25));
+                        spriteBatch.draw(sixTile, xoffset + (col * 25), yoffset + (row * -25));
                     }
                     else if(board[row][col] == 7) {
-                        spriteBatch.draw(sevenTile, xoffset + (col * 25), yoffset + (row * 25));
+                        spriteBatch.draw(sevenTile, xoffset + (col * 25), yoffset + (row * -25));
                     }
                     else if(board[row][col] == 8) {
-                        spriteBatch.draw(eightTile, xoffset + (col * 25), yoffset + (row * 25));
+                        spriteBatch.draw(eightTile, xoffset + (col * 25), yoffset + (row * -25));
                     }
                 }
             }

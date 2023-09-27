@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -26,14 +27,17 @@ public class GameScreen implements Screen {
     //control how the camera view the world
     //zoom in/out? Keep everything scaled?
     private Viewport viewport;
-
-
     private GameBoard myGameBoard;
+
+    private BitmapFont defaultFont = new BitmapFont();
+
+    private boolean debug = true;
+
 
 
 
     public GameScreen(){
-        myGameBoard = new GameBoard();
+        myGameBoard = new GameBoard(10,10,5);
     }
 
 
@@ -88,7 +92,6 @@ public class GameScreen implements Screen {
 
         //all drawing of shape must go between begin/end
         shapeRenderer.begin();
-        shapeRenderer.setColor(0,0,1,1);
         shapeRenderer.end();
 
 
@@ -96,9 +99,28 @@ public class GameScreen implements Screen {
         //all graphic must go between begin/end
         spriteBatch.begin();
         myGameBoard.draw(spriteBatch);
+        if(debug){
+            drawDebugText();
+        }
 
         spriteBatch.end();
     }
+
+    private void drawDebugText() {
+        int mouse_x = Gdx.input.getX();
+        int mouse_y = Gdx.input.getY();
+        defaultFont.draw(spriteBatch, "("+ mouse_x+ "," + mouse_y+ ")", 6,700);
+        Location currentLoc = myGameBoard.getTileAt(mouse_x, mouse_y);
+        defaultFont.draw(spriteBatch, "[row][col] ", 6,650);
+        if(currentLoc != null){
+            defaultFont.draw(spriteBatch, "[" + currentLoc.getRow() + "]" + "[" + currentLoc.getCol() + "]", 6, 680);
+        }
+        else {
+            defaultFont.draw(spriteBatch, "[null]" + "[null]", 6, 680);
+        }
+    }
+
+
 
     @Override
     public void resize(int width, int height) {
