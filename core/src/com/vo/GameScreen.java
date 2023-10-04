@@ -1,6 +1,7 @@
 package com.vo;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.GL20;
@@ -37,7 +38,7 @@ public class GameScreen implements Screen {
 
 
     public GameScreen(){
-        myGameBoard = new GameBoard(10,10,5);
+        myGameBoard = new GameBoard();
     }
 
 
@@ -90,6 +91,10 @@ public class GameScreen implements Screen {
         clearScreen();
 
 
+        //process user input
+        handleMouseClick();
+
+
         //all drawing of shape must go between begin/end
         shapeRenderer.begin();
         shapeRenderer.end();
@@ -101,9 +106,22 @@ public class GameScreen implements Screen {
         myGameBoard.draw(spriteBatch);
         if(debug){
             drawDebugText();
+            drawGUI();
         }
 
         spriteBatch.end();
+    }
+
+    private void drawGUI() {
+        defaultFont.draw(spriteBatch,"Flag Left: " + myGameBoard.getNumFlags(), 400, 200);
+    }
+
+    private void handleMouseClick() {
+        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            myGameBoard.leftClicked(Gdx.input.getX(), Gdx.input.getY());
+        }
+        else if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT))
+        myGameBoard.rightClicked(Gdx.input.getX(), Gdx.input.getY());
     }
 
     private void drawDebugText() {
@@ -112,6 +130,8 @@ public class GameScreen implements Screen {
         defaultFont.draw(spriteBatch, "("+ mouse_x+ "," + mouse_y+ ")", 6,700);
         Location currentLoc = myGameBoard.getTileAt(mouse_x, mouse_y);
         defaultFont.draw(spriteBatch, "[row][col] ", 6,650);
+        defaultFont.draw(spriteBatch, "["+(int)(MyGdxGame.World_Width) + "]", 6, 600);
+        defaultFont.draw(spriteBatch, "["+myGameBoard.xoffset + "]", 6, 550);
         if(currentLoc != null){
             defaultFont.draw(spriteBatch, "[" + currentLoc.getRow() + "]" + "[" + currentLoc.getCol() + "]", 6, 680);
         }
