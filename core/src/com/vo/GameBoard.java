@@ -228,9 +228,14 @@ public class GameBoard {
         ArrayList<Location> temp = getEightNeighbors(loc);
 
         for(int i = 0; i < temp.size() ; i++){
-            if(board[temp.get(i).getRow()][temp.get(i).getCol()]+ 10 >= EMPTYFLOOR){
-                uncoverArea(loc);
-                board[temp.get(i).getRow()][temp.get(i).getCol()] += 10;
+            if(board[temp.get(i).getRow()][temp.get(i).getCol()] <10) {
+                if (board[temp.get(i).getRow()][temp.get(i).getCol()] + 10 == EMPTYFLOOR) {
+                    board[temp.get(i).getRow()][temp.get(i).getCol()] += 10;
+                    uncoverArea(temp.get(i));
+
+                } else
+                    board[temp.get(i).getRow()][temp.get(i).getCol()] += 10;
+
             }
         }
 
