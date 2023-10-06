@@ -3,6 +3,8 @@ package com.vo;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import java.util.ArrayList;
+
 public class GameBoard {
 
     public static final int North = 0, NorthEast = 1, East = 2,
@@ -80,7 +82,7 @@ public class GameBoard {
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {
                 if (board[row][col] == EMPTYTILE) {
-                    board[row][col] = getEightNeighbors(row, col);
+                    board[row][col] = countBomb(row, col);
 
 
                 }
@@ -107,7 +109,7 @@ public class GameBoard {
 
     }
 
-    public int getEightNeighbors(int i, int j) {
+    public int countBomb(int i, int j) {
         int counter = 0;
         Location tempLoc1 = new Location(i, j);
         if (isValid(tempLoc1) == true) {
@@ -129,6 +131,22 @@ public class GameBoard {
 
         return counter;
     }
+    public ArrayList<Location> getEightNeighbors(Location loc){
+        ArrayList<Location> locs = new ArrayList<>();
+
+
+                for (int row = loc.getRow() - 1; row <= loc.getRow() + 1; row++) {
+                    for (int col = loc.getCol() - 1; col <= loc.getCol() + 1; col++) {
+                        Location tempLoc = new Location(row, col);
+                        if (isValid(tempLoc) && !tempLoc.equals(loc)) {
+                            locs.add(tempLoc);
+                            }
+                        }
+                    }
+                return locs;
+                }
+
+
 
 
     public boolean isValid(Location loc) {
@@ -191,35 +209,50 @@ public class GameBoard {
 
 
         //calid and on uncoverd tile
-        if (clickLoc != null && board[clickLoc.getRow()][clickLoc.getCol()] < 9) {
+        if(board[clickLoc.getRow()][clickLoc.getCol()] < 9) {
+        if (board[clickLoc.getRow()][clickLoc.getCol()] + 10 == EMPTYFLOOR) {
             //uncover the tile
-            board[clickLoc.getRow()][clickLoc.getCol()] += 10;
+            uncoverArea(clickLoc);
             //if we uncover an empty floor, initiate recrusive uncover method
-             if( board[clickLoc.getRow()][clickLoc.getCol()] == EMPTYFLOOR){
-                uncoverArea(clickLoc);
+        }  else  {
+
+                board[clickLoc.getRow()][clickLoc.getCol()] += 10;
             }
         }
     }
+
+
     // recursive method that "propogates" through the board uncovering an area of empty tiles, and the surrounding numbers
     private void uncoverArea(Location loc){
         //get the surrounding of the loc
+        ArrayList<Location> temp = getEightNeighbors(loc);
+
+        for(int i = 0; i < temp.size() ; i++){
+            if(board[temp.get(i).getRow()][temp.get(i).getCol()]+ 10 >= EMPTYFLOOR){
+                uncoverArea(loc);
+                board[temp.get(i).getRow()][temp.get(i).getCol()] += 10;
+            }
+        }
+
+        /*
         for (int row = loc.getRow() - 1; row <= loc.getRow() + 1; row++) {
             for (int col = loc.getCol() - 1; col <= loc.getCol() + 1; col++) {
                 Location tempLoc = new Location(row, col);
-                if (isValid(tempLoc) == true) {
-                    if (tempLoc != null && (board[row][col] == EMPTYTILE) ) {
-                        board[row][col] += 10;
-                        uncoverArea(tempLoc);
-                        for (int row1 = loc.getRow() - 1; row <= loc.getRow() + 1; row++) {
-                            for (int col1 = loc.getCol() - 1; col <= loc.getCol() + 1; col++) {
+                if (isValid(tempLoc)) {
+                    System.out.println("Location: " + row + col + "tile value: " + board[row][col]);
+                    //check if the tile is empty
+                    // if empty pass it again
+                    if(board[row][col] == EMPTYTILE) {
+                        if (tempLoc != null && (board[row][col] + 10 > 9)) {
+                            board[row][col] += 10;
 
-                            }
+
                         }
                     }
                 }
-
             }
-        }
+
+         */
 
 
 
